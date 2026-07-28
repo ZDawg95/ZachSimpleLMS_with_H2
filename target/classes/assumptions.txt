@@ -1,3 +1,0 @@
-Assumptions made:
-
-1. Multiple can have the exact same name, but 2 borrowers can have the same email address
