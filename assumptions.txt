@@ -1,0 +1,8 @@
+Assumptions made:
+
+1. Borrowers may share the same name, but each borrower email address is unique.
+2. A Book is a catalogue record identified by its Book ID and ISBN. The API uses the Book ID and Borrower ID to borrow and return a book.
+3. A BookCopy represents one physical copy of a catalogue Book. Registering a book with an existing ISBN, title, and author creates another BookCopy rather than another catalogue Book.
+4. When borrowing, the system automatically selects the oldest AVAILABLE BookCopy for the requested Book ID. API users do not need to supply a BookCopy ID.
+5. A borrower may have at most one CHECKED_OUT BookCopy for the same catalogue Book at a time. Other borrowers may borrow other available copies of that Book.
+6. ISBN values are stored as text so leading zeroes and ISBN-10/ISBN-13 formatting can be preserved.

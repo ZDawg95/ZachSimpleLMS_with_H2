@@ -28,16 +28,16 @@ public class BorrowBookServiceImpl implements BorrowBookService {
 
     @Override
     @Transactional
-    public BookCopy borrowBook(String isbn, Long borrowerId) {
-        if (isbn == null || isbn.trim().isEmpty()) {
-            throw new IllegalArgumentException("ISBN cannot be null or blank.");
+    public BookCopy borrowBook(Long bookId, Long borrowerId) {
+        if (bookId == null) {
+            throw new IllegalArgumentException("Book ID cannot be null.");
         }
         if (borrowerId == null) {
             throw new IllegalArgumentException("Borrower ID cannot be null.");
         }
 
-        Book book = bookRepository.findByIsbnIgnoreCase(isbn.trim())
-                .orElseThrow(() -> new IllegalArgumentException("No book found with this ISBN."));
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new IllegalArgumentException("No book found with this ID."));
 
         Borrower borrower = borrowerRepository.findById(borrowerId)
                 .orElseThrow(() -> new IllegalArgumentException("No borrower found with this ID."));
@@ -51,7 +51,7 @@ public class BorrowBookServiceImpl implements BorrowBookService {
         BookCopy availableCopy = bookCopyRepository
                 .findFirstByBookAndBookStatusOrderByDateAddedAsc(book, BookStatus.AVAILABLE)
                 .orElseThrow(() -> new IllegalArgumentException(
-                        "No available copies exist for ISBN " + book.getIsbn() + "."));
+                        "No available copies exist for book ID " + book.getId() + "."));
 
         availableCopy.setBookStatus(BookStatus.CHECKED_OUT);
         availableCopy.setBorrowedBy(borrower);
@@ -60,16 +60,16 @@ public class BorrowBookServiceImpl implements BorrowBookService {
 
     @Override
     @Transactional
-    public BookCopy returnBook(String isbn, Long borrowerId) {
-        if (isbn == null || isbn.trim().isEmpty()) {
-            throw new IllegalArgumentException("ISBN cannot be null or blank.");
+    public BookCopy returnBook(Long bookId, Long borrowerId) {
+        if (bookId == null) {
+            throw new IllegalArgumentException("Book ID cannot be null.");
         }
         if (borrowerId == null) {
             throw new IllegalArgumentException("Borrower ID cannot be null.");
         }
 
-        Book book = bookRepository.findByIsbnIgnoreCase(isbn.trim())
-                .orElseThrow(() -> new IllegalArgumentException("No book found with this ISBN."));
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new IllegalArgumentException("No book found with this ID."));
 
         Borrower borrower = borrowerRepository.findById(borrowerId)
                 .orElseThrow(() -> new IllegalArgumentException("No borrower found with this ID."));

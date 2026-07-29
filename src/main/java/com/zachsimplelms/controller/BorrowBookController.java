@@ -21,11 +21,11 @@ public class BorrowBookController {
         this.borrowBookService = borrowBookService;
     }
 
-    /** Checks out the next available copy of the requested ISBN. */
+    /** Checks out the next available copy of the requested catalogue book. */
     @PutMapping("/borrow")
     @Operation(summary = "Borrow the next available copy of a book")
-    public BookCopy borrowBook(@RequestParam String isbn, @RequestParam Long borrowerId) {
-        BookCopy checkedOutCopy = borrowBookService.borrowBook(isbn, borrowerId);
+    public BookCopy borrowBook(@RequestParam Long bookId, @RequestParam Long borrowerId) {
+        BookCopy checkedOutCopy = borrowBookService.borrowBook(bookId, borrowerId);
         logger.info("Book copy with id {} checked out to borrower id {}", checkedOutCopy.getId(), borrowerId);
         return checkedOutCopy;
     }
@@ -33,8 +33,8 @@ public class BorrowBookController {
     /** Returns a checked-out copy to the library. */
     @PutMapping("/return")
     @Operation(summary = "Return a checked-out copy of a book")
-    public BookCopy returnBook(@RequestParam String isbn, @RequestParam Long borrowerId) {
-        BookCopy returnedCopy = borrowBookService.returnBook(isbn, borrowerId);
+    public BookCopy returnBook(@RequestParam Long bookId, @RequestParam Long borrowerId) {
+        BookCopy returnedCopy = borrowBookService.returnBook(bookId, borrowerId);
         logger.info("Book copy with id {} returned by borrower id {}", returnedCopy.getId(), borrowerId);
         return returnedCopy;
     }
