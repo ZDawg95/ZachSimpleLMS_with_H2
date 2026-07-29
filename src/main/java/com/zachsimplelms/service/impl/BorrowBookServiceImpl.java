@@ -42,6 +42,12 @@ public class BorrowBookServiceImpl implements BorrowBookService {
         Borrower borrower = borrowerRepository.findById(borrowerId)
                 .orElseThrow(() -> new IllegalArgumentException("No borrower found with this ID."));
 
+        if (bookCopyRepository.existsByBookAndBorrowedByAndBookStatus(
+                book, borrower, BookStatus.CHECKED_OUT)) {
+            throw new IllegalArgumentException(
+                    "A user is not allowed to borrow more than 1 copy of the same book.");
+        }
+
         BookCopy availableCopy = bookCopyRepository
                 .findFirstByBookAndBookStatusOrderByDateAddedAsc(book, BookStatus.AVAILABLE)
                 .orElseThrow(() -> new IllegalArgumentException(
