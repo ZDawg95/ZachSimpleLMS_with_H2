@@ -1,6 +1,6 @@
 # Zach Simple LMS
 
-Zach Simple LMS is a Java 17 Spring Boot REST API for registering borrowers and
+Zach Simple Library Management System (LMS) is a Java 17 Spring Boot REST API for registering borrowers and
 books, managing physical book copies, and borrowing or returning available
 copies.
 
