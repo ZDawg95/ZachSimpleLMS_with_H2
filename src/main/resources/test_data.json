@@ -1,4 +1,5 @@
-//swagger quick creation jsons
+/*SWAGGER QUICK CREATION JSONS*/
+/*Borrowers*/
 
 {
   "name": "Hwang Foo Shen",
@@ -15,3 +16,19 @@
   "email": "Bangaicuazach@gmail.com"
 }
 
+/*Books */
+{
+	"isbn": "111222333444",
+	"title": "The telling of lies",
+	"author": "The Truth"
+}
+{
+	"isbn": "000-777-000-77",
+	"title": "James Bond: Licensed to Kill?",
+	"author": "Ian Flemming"
+}
+{
+	"isbn": "888-888-888-88",
+	"title": "Feng Shui: Lucky Stars 8",
+	"author": "Joey Yap"
+}

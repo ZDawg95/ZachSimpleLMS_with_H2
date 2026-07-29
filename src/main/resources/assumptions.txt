@@ -3,3 +3,4 @@ Assumptions made:
 1. Multiple can have the exact same name, but 2 borrowers can have the same email address
 2. In order to borrow a book, the REST API is assumed to be called by another system connected to physical barcode scanners, hence the ISBN of a book upon checkout at the library counter. Therefore, a book can only be checked out or returned by ISBN number.
 3. The ISBN number shall consist of 13 characters, adhereing to ISBN-13: the current standard format used for all books published from January 1, 2007, onward.
+4. IMPORTANT: When a Borrower wants to borrow a Copy of a Book, there is assumed to be a system that supplies the REST API with the Book ID (PK) for a given book. The librarian keys in the Borrower's email address and the system sends the Book ID as stored in the DB to the rest API.

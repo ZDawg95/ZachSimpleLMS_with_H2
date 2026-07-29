@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
@@ -14,7 +15,12 @@ import jakarta.validation.constraints.NotBlank;
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_id_sequence")
+    @SequenceGenerator(
+            name = "book_id_sequence",
+            sequenceName = "book_id_sequence",
+            initialValue = 100,
+            allocationSize = 1)
     private Long id;
 
     // One catalogue record exists for each ISBN.
