@@ -1,0 +1,20 @@
+Database Justification
+
+This project uses H2 as a file-based embedded database.
+
+Why H2 was chosen:
+
+- It is easy to package inside a single Spring Boot JAR.
+- It does not require a separate database server to be installed or managed.
+- It is suitable for a self-contained demo application.
+- It keeps setup simple for an assessor who only needs to run the jar and open the API.
+
+How the database is used:
+
+- The application stores borrower, book, and book copy data in H2.
+- The database file is created locally in a data folder next to the folder where the jar is run.
+- Data persists between restarts as long as the local database file is kept.
+
+Additional documentation:
+
+The full project documentation, including run instructions and assumptions, is in README.md.
