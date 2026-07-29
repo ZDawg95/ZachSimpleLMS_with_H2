@@ -1,6 +1,8 @@
 package com.zachsimplelms.controller;
 
 import com.zachsimplelms.model.Book;
+import com.zachsimplelms.model.BookCopy;
+import com.zachsimplelms.service.BookCopyService;
 import com.zachsimplelms.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
@@ -14,9 +16,11 @@ import java.util.List;
 public class BookController {
     private static final Logger logger = LoggerFactory.getLogger(BookController.class);
     private final BookService bookService;
+    private final BookCopyService bookCopyService;
 
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, BookCopyService bookCopyService) {
         this.bookService = bookService;
+        this.bookCopyService= bookCopyService;
     }
 
     /**1. Registers a catalogue book and creates one physical copy. */
@@ -33,6 +37,13 @@ public class BookController {
     @Operation(summary = "Gets a list of all unique books")
     public List<Book> getAllBooks() {
         return bookService.getAllBooks();
+    }
+
+    /**3. Gets a list of all book copies */
+    @GetMapping("/getAllBookCopies")
+    @Operation(summary = " Gets a list of all book copies")
+    public List<BookCopy> getAllBookCopies() {
+        return bookCopyService.getAllBookCopies();
     }
 
 }

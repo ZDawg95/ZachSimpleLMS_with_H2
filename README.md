@@ -22,7 +22,7 @@ Use these connection details:
 
 ```text
 JDBC URL: jdbc:h2:file:./data/zachsimplelms
-User Name: zachary
+User Name: sa
 Password:
 ```
 
