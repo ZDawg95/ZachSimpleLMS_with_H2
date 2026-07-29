@@ -2,6 +2,7 @@ package com.zachsimplelms.service.impl;
 
 import com.zachsimplelms.model.Book;
 import com.zachsimplelms.model.BookCopy;
+import com.zachsimplelms.model.Borrower;
 import com.zachsimplelms.repository.BookCopyRepository;
 import com.zachsimplelms.repository.BookRepository;
 import com.zachsimplelms.service.BookService;
@@ -9,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -49,6 +52,12 @@ public class BookServiceImpl implements BookService {
 
         bookCopyRepository.save(new BookCopy(catalogueBook));
         return catalogueBook;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Book> getAllBooks() {
+        return bookRepository.findAll();
     }
 
     private boolean isBlank(String value) {
