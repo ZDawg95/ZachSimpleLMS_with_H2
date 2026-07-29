@@ -1,5 +1,7 @@
 package com.zachsimplelms.service.impl;
 
+import com.zachsimplelms.exception.BadRequestException;
+import com.zachsimplelms.exception.ConflictException;
 import com.zachsimplelms.model.Book;
 import com.zachsimplelms.model.BookCopy;
 import com.zachsimplelms.model.Borrower;
@@ -29,10 +31,10 @@ public class BookServiceImpl implements BookService {
     @Transactional
     public Book registerBook(Book book) {
         if (book == null) {
-            throw new IllegalArgumentException("Book cannot be null.");
+            throw new BadRequestException("Book cannot be null.");
         }
         if (isBlank(book.getIsbn()) || isBlank(book.getTitle()) || isBlank(book.getAuthor())) {
-            throw new IllegalArgumentException("ISBN, title, and author are required.");
+            throw new BadRequestException("ISBN, title, and author are required.");
         }
 
         String isbn = book.getIsbn().trim();
@@ -44,7 +46,7 @@ public class BookServiceImpl implements BookService {
         } else { //one isbn can only be tied to a specific author-title combination
             if (!catalogueBook.getTitle().equals(book.getTitle().trim())
                     || !catalogueBook.getAuthor().equals(book.getAuthor().trim())) {
-                throw new IllegalArgumentException(
+                throw new ConflictException(
                         "ISBN already exists with a different title or author.");
             }
             logger.info("ISBN {} already exists; adding another physical copy", isbn);

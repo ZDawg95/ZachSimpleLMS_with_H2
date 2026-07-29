@@ -1,5 +1,7 @@
 package com.zachsimplelms.service.impl;
 
+import com.zachsimplelms.exception.BadRequestException;
+import com.zachsimplelms.exception.ConflictException;
 import com.zachsimplelms.model.Borrower;
 import com.zachsimplelms.repository.BorrowerRepository;
 import com.zachsimplelms.service.BorrowerService;
@@ -25,21 +27,21 @@ public class BorrowerServiceImpl implements BorrowerService {
     @Override
     public Borrower createBorrower(Borrower borrower) {
         if (borrower == null) {
-            throw new IllegalArgumentException("Borrower input cannot be null.");
+            throw new BadRequestException("Borrower input cannot be null.");
         }
         if (isBlank(borrower.getName())) {
-            throw new IllegalArgumentException("Borrower name cannot be null or blank.");
+            throw new BadRequestException("Borrower name cannot be null or blank.");
         }
         if (isBlank(borrower.getEmail())) {
-            throw new IllegalArgumentException("Borrower email cannot be null or blank.");
+            throw new BadRequestException("Borrower email cannot be null or blank.");
         }
 
         String email = borrower.getEmail().trim();
         if (borrowerExistsWithEmail(email)) {
-            throw new IllegalArgumentException("A borrower with this email address already exists.");
+            throw new ConflictException("A borrower with this email address already exists.");
         }
         if (!SIMPLE_EMAIL_PATTERN.matcher(email).matches()) {
-            throw new IllegalArgumentException("Invalid email format.");
+            throw new BadRequestException("Invalid email format.");
         }
 
         borrower.setName(borrower.getName().trim());

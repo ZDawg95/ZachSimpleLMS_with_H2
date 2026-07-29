@@ -1,5 +1,8 @@
 package com.zachsimplelms.service.impl;
 
+import com.zachsimplelms.exception.BadRequestException;
+import com.zachsimplelms.exception.ConflictException;
+import com.zachsimplelms.exception.ResourceNotFoundException;
 import com.zachsimplelms.model.Book;
 import com.zachsimplelms.model.BookCopy;
 import com.zachsimplelms.model.Borrower;
@@ -30,27 +33,27 @@ public class BorrowBookServiceImpl implements BorrowBookService {
     @Transactional
     public BookCopy borrowBook(Long bookId, Long borrowerId) {
         if (bookId == null) {
-            throw new IllegalArgumentException("Book ID cannot be null.");
+            throw new BadRequestException("Book ID cannot be null.");
         }
         if (borrowerId == null) {
-            throw new IllegalArgumentException("Borrower ID cannot be null.");
+            throw new BadRequestException("Borrower ID cannot be null.");
         }
 
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new IllegalArgumentException("No book found with this ID."));
+                .orElseThrow(() -> new ResourceNotFoundException("No book found with this ID."));
 
         Borrower borrower = borrowerRepository.findById(borrowerId)
-                .orElseThrow(() -> new IllegalArgumentException("No borrower found with this ID."));
+                .orElseThrow(() -> new ResourceNotFoundException("No borrower found with this ID."));
 
         if (bookCopyRepository.existsByBookAndBorrowedByAndBookStatus(
                 book, borrower, BookStatus.CHECKED_OUT)) {
-            throw new IllegalArgumentException(
+            throw new ConflictException(
                     "A user is not allowed to borrow more than 1 copy of the same book.");
         }
 
         BookCopy availableCopy = bookCopyRepository
                 .findFirstByBookAndBookStatusOrderByDateAddedAsc(book, BookStatus.AVAILABLE)
-                .orElseThrow(() -> new IllegalArgumentException(
+                .orElseThrow(() -> new ConflictException(
                         "No available copies exist for book ID " + book.getId() + "."));
 
         availableCopy.setBookStatus(BookStatus.CHECKED_OUT);
@@ -62,22 +65,22 @@ public class BorrowBookServiceImpl implements BorrowBookService {
     @Transactional
     public BookCopy returnBook(Long bookId, Long borrowerId) {
         if (bookId == null) {
-            throw new IllegalArgumentException("Book ID cannot be null.");
+            throw new BadRequestException("Book ID cannot be null.");
         }
         if (borrowerId == null) {
-            throw new IllegalArgumentException("Borrower ID cannot be null.");
+            throw new BadRequestException("Borrower ID cannot be null.");
         }
 
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new IllegalArgumentException("No book found with this ID."));
+                .orElseThrow(() -> new ResourceNotFoundException("No book found with this ID."));
 
         Borrower borrower = borrowerRepository.findById(borrowerId)
-                .orElseThrow(() -> new IllegalArgumentException("No borrower found with this ID."));
+                .orElseThrow(() -> new ResourceNotFoundException("No borrower found with this ID."));
 
         BookCopy checkedOutCopy = bookCopyRepository
                 .findFirstByBookAndBorrowedByAndBookStatus(
                         book, borrower, BookStatus.CHECKED_OUT)
-                .orElseThrow(() -> new IllegalArgumentException(
+                .orElseThrow(() -> new ConflictException(
                         "This borrower has not checked out this book."));
 
         checkedOutCopy.setBorrowedBy(null);
