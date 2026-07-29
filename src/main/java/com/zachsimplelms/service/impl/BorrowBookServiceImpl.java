@@ -57,4 +57,31 @@ public class BorrowBookServiceImpl implements BorrowBookService {
         availableCopy.setBorrowedBy(borrower);
         return bookCopyRepository.save(availableCopy);
     }
+
+    @Override
+    @Transactional
+    public BookCopy returnBook(String isbn, Long borrowerId) {
+        if (isbn == null || isbn.trim().isEmpty()) {
+            throw new IllegalArgumentException("ISBN cannot be null or blank.");
+        }
+        if (borrowerId == null) {
+            throw new IllegalArgumentException("Borrower ID cannot be null.");
+        }
+
+        Book book = bookRepository.findByIsbnIgnoreCase(isbn.trim())
+                .orElseThrow(() -> new IllegalArgumentException("No book found with this ISBN."));
+
+        Borrower borrower = borrowerRepository.findById(borrowerId)
+                .orElseThrow(() -> new IllegalArgumentException("No borrower found with this ID."));
+
+        BookCopy checkedOutCopy = bookCopyRepository
+                .findFirstByBookAndBorrowedByAndBookStatus(
+                        book, borrower, BookStatus.CHECKED_OUT)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "This borrower has not checked out this book."));
+
+        checkedOutCopy.setBorrowedBy(null);
+        checkedOutCopy.setBookStatus(BookStatus.AVAILABLE);
+        return bookCopyRepository.save(checkedOutCopy);
+    }
 }

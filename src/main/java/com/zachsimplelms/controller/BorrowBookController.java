@@ -29,4 +29,13 @@ public class BorrowBookController {
         logger.info("Book copy with id {} checked out to borrower id {}", checkedOutCopy.getId(), borrowerId);
         return checkedOutCopy;
     }
+
+    /** Returns a checked-out copy to the library. */
+    @PutMapping("/return")
+    @Operation(summary = "Return a checked-out copy of a book")
+    public BookCopy returnBook(@RequestParam String isbn, @RequestParam Long borrowerId) {
+        BookCopy returnedCopy = borrowBookService.returnBook(isbn, borrowerId);
+        logger.info("Book copy with id {} returned by borrower id {}", returnedCopy.getId(), borrowerId);
+        return returnedCopy;
+    }
 }
